@@ -47,6 +47,11 @@
             {{ address(item) }}<v-icon small right @click.stop v-clipboard="() => address(item)" v-clipboard:success="showCopySnack">mdi-content-copy</v-icon>
           </v-chip>
         </template>
+        
+        <template v-slot:item.call_home="{ item }">
+           <v-icon class="icons" @click="disableCallhome(item)">cancel</v-icon>
+           <v-icon class="icons" @click="enableCallhome(item)">check_circle</v-icon>
+        </template>
 
         <template v-slot:item.actions="{ item }">
           <v-icon class="icons" @click="detailsDevice(item)">info</v-icon>
@@ -59,6 +64,7 @@
       </v-data-table>
     </v-card-text>
     <v-snackbar v-model="copySnack" :timeout=3000>Device SSHID copied to clipboard</v-snackbar>
+    <v-snackbar v-model="showMsg" :timeout=3000>Device call home status changed. Please refresh page.</v-snackbar>
   </v-card>
 
 </fragment>
@@ -89,6 +95,7 @@ export default {
         'ubuntu-core': 'fl-ubuntu'
       },
       copySnack: false,
+      showMsg: false,
       editName: '',
       headers: [
         {
@@ -108,6 +115,11 @@ export default {
         {
           text: 'SSHID',
           value: 'namespace',
+          align: 'center'
+        },
+        {
+          text: 'Call Home',
+          value: 'call_home',
           align: 'center'
         },
         {
@@ -153,6 +165,16 @@ export default {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('devices/remove', uid);
       }
+    },
+
+    disableCallhome(item) {
+        this.$store.dispatch('devices/disableCallhome', item);
+      this.showMsg = true;
+    },
+    
+    enableCallhome(item) {
+        this.$store.dispatch('devices/enableCallhome', item);
+      this.showMsg = true;
     },
 
     showCopySnack() {

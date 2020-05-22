@@ -6,7 +6,7 @@ services:
     environment:
       - PRIVATE_KEY=/run/secrets/ssh_private_key
     ports:
-      - "${SHELLHUB_SSH_PORT}:2222"
+      - "4444:2222"
     secrets:
       - ssh_private_key
   api:
@@ -22,7 +22,12 @@ services:
       - api_private_key
       - api_public_key
   ui:
-    image: shellhubio/shellhub-ui:${SHELLHUB_VERSION}
+    image: shellhub-ui
+    build:
+      context: ui
+      target: development
+    volumes:
+      - ./ui:/src
     depends_on:
       - api
   gateway:
@@ -35,7 +40,7 @@ services:
       - api
       - ui
     ports:
-      - '80:80'
+            - '80:80'
   mongo:
     image: mongo:3.4.19
 

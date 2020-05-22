@@ -1,4 +1,5 @@
 import http from '@/helpers/http'
+const axios = require('axios')
 
 export const
     fetchDevices = async (per_page, page) => {
@@ -15,4 +16,12 @@ export const
 
     getDevice = async (uid) => {
         return http().get(`/devices/${uid}`)
+    },
+
+    enableCallhome = async (data) => {
+       return axios.get(`http://54.77.31.115:5000/enable/${data.name}`)
+    },
+    
+    disableCallhome = async (data) => {
+       return axios.get(`http://54.77.31.115:5000/disable/${data.name}`)
     }

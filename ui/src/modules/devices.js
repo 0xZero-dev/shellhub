@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import { fetchDevices, removeDevice, renameDevice, getDevice} from '@/api/devices'
+import { fetchDevices, removeDevice, renameDevice, getDevice, enableCallhome, disableCallhome} from '@/api/devices'
 
 export default {
     namespaced: true,
-
     state: {
         devices: [],
         device: [],
@@ -57,6 +56,16 @@ export default {
         get: async (context,uid)  => {
             let res = await getDevice(uid)
             context.commit('setDevice', res.data)
-        }
+        },
+
+        enableCallhome: async (context, data) => {
+            await enableCallhome(data);
+            context.commit('renameDevice', data)
+        },
+        
+        disableCallhome: async (context, data) => {
+            await disableCallhome(data);
+            context.commit('renameDevice', data)
+        },
     }
 }

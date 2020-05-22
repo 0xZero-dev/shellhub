@@ -10,6 +10,10 @@ services:
     volumes:
       - ./ssh:/go/src/github.com/shellhub-io/shellhub/ssh
       - ./pkg:/go/src/github.com/shellhub-io/shellhub/pkg
+    environment:
+      - PRIVATE_KEY=/run/secrets/ssh_private_key
+    ports:
+      - "44444:2222"
   api:
     image: shellhub-api
     build:
@@ -32,6 +36,8 @@ services:
       context: gateway
     environment:
       - SHELLHUB_VERSION=latest
+    ports:
+            - '80:80'
   agent:
     image: shellhub-agent
     build:
